@@ -1,0 +1,562 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --background: hsl(0, 0%, 98%);
+  --foreground: hsl(0, 0%, 12%);
+  --border: hsl(0, 0%, 88%);
+  --card: hsl(0, 0%, 96%);
+  --card-foreground: hsl(0, 0%, 12%);
+  --card-border: hsl(0, 0%, 92%);
+  --primary: hsl(168, 76%, 32%);
+  --primary-foreground: hsl(168, 76%, 98%);
+  --secondary: hsl(0, 0%, 88%);
+  --secondary-foreground: hsl(0, 0%, 12%);
+  --muted: hsl(168, 8%, 90%);
+  --muted-foreground: hsl(168, 8%, 35%);
+  --accent: hsl(168, 12%, 88%);
+  --accent-foreground: hsl(168, 76%, 18%);
+  
+  /* --- NEW FONT --- */
+  --font-sans: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display: 'Montserrat', sans-serif; /* For animated buttons */
+  
+  --shadow-lg: 0px 10px 15px -3px rgba(0, 0, 0, 0.08), 0px 4px 6px -4px rgba(0, 0, 0, 0.06);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--background);
+  color: var(--foreground);
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevents all scrollbars */
+}
+
+/* This is the main "stage" that centers the app */
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  perspective: 800px;
+  
+  /* --- NEW --- Sizing is now on the viewport */
+  width: 500px; /* Your requested width */
+  height: 700px; /* Your requested height */
+  position: relative;
+  margin: auto; /* Center the app container itself */
+}
+
+/* This is the base for all 3 of your "pages" */
+.view {
+  width: 100%;
+  height: 100%;
+  
+  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent) 0%, hsl(168, 12%, 92%) 100%);
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  padding: 16px;
+  
+  position: absolute; 
+  
+  /* --- NEW FADE ANIMATION --- */
+  opacity: 0;
+  visibility: hidden;
+  display: flex; 
+  flex-direction: column;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s;
+}
+
+.view.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Header (used by all views) */
+.header {
+  margin-bottom: 12px;
+  position: relative;
+  flex-shrink: 0;
+  /* Added to align title/button */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px; /* Set to logo height */
+}
+
+.logo {
+  height: 32px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  color: var(--foreground);
+  /* Remove auto-margins */
+  margin: 0; 
+}
+
+/* --- Mode Selector View --- */
+.mode-selection-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+/* === NEW STYLES FOR ANIMATED LOGO === */
+.animated-logo-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Adds space between logo and first button */
+  margin-bottom: 10px; 
+}
+
+.animated-logo {
+  /* Set a max-width for the logo */
+  max-width: 120px; 
+  height: auto;
+  object-fit: contain;
+}
+/* === END OF NEW STYLES === */
+
+
+/* --- NEW ANIMATED GRADIENT BUTTON --- */
+.btn-mode-select {
+  position: relative;
+  width: 100%;
+  padding: 24px;
+  background: var(--card);
+  border: 2px solid var(--card-border);
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  color: var(--foreground);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-mode-select .btn-text {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--primary);
+  transition: all 0.3s ease;
+}
+
+.btn-mode-select::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, var(--primary), hsl(168, 76%, 50%));
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.4s ease-in-out;
+  z-index: 1;
+}
+
+.btn-mode-select:hover::before,
+.btn-mode-select:focus::before {
+  transform: scaleX(1);
+}
+
+.btn-mode-select:hover .btn-text,
+.btn-mode-select:focus .btn-text {
+  color: var(--primary-foreground);
+  transform: scale(1.05);
+}
+
+/* --- Style/Fabric Selector View --- */
+.style-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: max-content;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-bottom: 12px;
+  padding: 4px; /* Room for glow */
+}
+
+/* --- NEW SELECTION STYLE (Card/Tile) --- */
+.style-card,
+.fabric-tile {
+  background: var(--card);
+  border: 3px solid var(--card-border);
+  border-radius: 8px;
+  overflow: hidden; /* Add this back to keep corners clean */
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  height: auto;
+  position: relative;
+}
+
+.style-card:hover,
+.fabric-tile:hover {
+  /* All hover effects removed as requested */
+}
+
+
+/* --- REMOVED ALL THE OLD, FAILED GLOWING RING STYLES --- */
+
+
+/* --- NEW 50% OVERLAY SELECTION EFFECT --- */
+
+/* This is the new overlay element */
+.selection-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--primary); /* The button green */
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 1; /* Sits below the content */
+}
+
+/* This makes the overlay visible when .selected is added */
+.style-card.selected .selection-overlay,
+.fabric-tile.selected .selection-overlay {
+  opacity: 0.5; /* The 50% transparency */
+}
+
+/* This "lifts" the content (image, text) on top of the overlay */
+.style-card .style-image,
+.style-card .style-name,
+.fabric-tile .fabric-info {
+  position: relative;
+  z-index: 2; /* Sits on top of the overlay (z-index: 1) */
+}
+/* --- End of new selection style --- */
+
+
+.style-image {
+  width: 100%;
+  aspect-ratio: 1;
+  /* THIS WAS THE FIX: Changed from var(--muted) to transparent */
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.style-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.style-name {
+  padding: 8px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--foreground);
+  flex-shrink: 0;
+  background: transparent; 
+}
+
+/* --- Fabric Tile Styles --- */
+.style-grid.fabric-mode {
+  grid-template-columns: 1fr;
+}
+
+.fabric-tile {
+  width: 100%;
+  /* THIS WAS THE FIX: Removed padding from here */
+  /* padding: 16px; */ 
+  display: flex;
+  flex-direction: column;
+}
+
+.fabric-info {
+  display: flex;
+  flex-direction: column;
+  /* THIS WAS THE FIX: Added padding here */
+  padding: 16px;
+  /* Added to make sure it grows to fill the card */
+  flex: 1;
+}
+
+.fabric-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 8px;
+}
+
+.fabric-description {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  line-height: 1.5;
+}
+
+
+/* --- Buttons --- */
+.btn-primary {
+  width: 100%;
+  height: 44px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: hsl(168, 76%, 28%);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  height: 32px;
+  padding: 0 8px;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-secondary:hover {
+  background: var(--muted);
+}
+
+/* --- NEW RULE FOR THE HEADER "CHANGE" BUTTON --- */
+.btn-header-change {
+  position: absolute;
+  right: 0;
+  top: 0;
+  /* Aligns with the 32px height of the header */
+}
+
+
+/* --- Builder View --- */
+.builder-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  background: hsla(0, 0%, 100%, 0.5);
+  margin: -16px -16px 0 -16px;
+  padding: 8px 16px;
+  flex-shrink: 0;
+  /* Reset height from general .header rule */
+  height: auto;
+}
+
+.builder-header-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.builder-title {
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--foreground);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.builder-description {
+  font-size: 9px;
+  color: var(--muted-foreground);
+  margin: 2px 0 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.builder-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-top: 16px;
+  min-height: 0;
+}
+
+.reference-image {
+  height: 140px;
+  background: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.reference-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.parts-container {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+.  min-height: 0;
+}
+
+.parts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.execute-button-container {
+  padding: 12px 0 0 0;
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.part-card {
+  background: var(--card);
+  border: 2px solid var(--card-border);
+  border-radius: 6px;
+  padding: 12px;
+  flex-shrink: 0;
+}
+
+.part-content {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  min-height: 60px;
+}
+
+.part-icon {
+  width: 56px;
+  height: 56px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  background: hsla(168, 8%, 90%, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 4px;
+}
+
+.part-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;.
+}
+
+.part-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.part-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--foreground);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.part-select {
+  width: 100%;
+  height: 32px;
+  padding: 0 8px;
+  background: white;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 10px;
+  font-family: var(--font-sans);
+  cursor: pointer;
+}
+
+.part-select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+.part-preview {
+  width: 64px;
+  height: 100%;
+  min-height: 60px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* Scrollbar styling */
+.style-grid::-webkit-scrollbar,
+.parts-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.style-grid::-webkit-scrollbar-track,
+.parts-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.style-grid::-webkit-scrollbar-thumb,
+.parts-list::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.style-grid::-webkit-scrollbar-thumb:hover,
+.parts-list::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}

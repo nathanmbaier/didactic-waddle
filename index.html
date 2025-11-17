@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap Builder</title>
+  <script src="./CSInterface.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <!-- Added Google Font for the animation -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+  
+  <!-- The App Container is now the "stage" for the pages -->
+  <div class="app-container">
+
+    <!-- *** Mode Selector View *** -->
+    <div id="mode-selector-view" class="view">
+      <div class="header">
+        <img src="assets/maginlogo.png" alt="MAGIN" class="logo" data-testid="img-brand-logo">
+        <h1 class="title" data-testid="text-page-title">CHOOSE A MODE</h1>
+      </div>
+      <div class="mode-selection-container">
+        <!-- === NEW ANIMATED LOGO === -->
+        <div class="animated-logo-container">
+          <img src="assets/maginwalking.gif" alt="Magin Animated Logo" class="animated-logo">
+        </div>
+        <!-- === END OF NEW LOGO === -->
+
+        <!-- Buttons are updated for the new animation -->
+        <button id="select-by-style-btn" class="btn-mode-select">
+          <span class="btn-text">SELECT BY STYLE</span>
+        </button>
+        <button id="select-by-fabric-btn" class="btn-mode-select">
+          <span class="btn-text">SELECT BY FABRIC</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- *** Style Selector View *** -->
+    <div id="style-selector-view" class="view">
+      <div class="header">
+        <img src="assets/maginlogo.png" alt="MAGIN" class="logo" data-testid="img-brand-logo">
+        <h1 id="style-selector-title" class="title" data-testid="text-page-title"></h1>
+        <!-- THIS IS THE NEW BUTTON -->
+        <button id="change-style-selection-btn" class="btn-secondary btn-header-change" data-testid="button-change-mode">CHANGE</button>
+      </div>
+      <div class="style-grid" id="style-grid"></div>
+      <button id="confirm-btn" class="btn-primary" disabled data-testid="button-confirm-style">
+        CONFIRM SELECTIONS
+      </button>
+    </div>
+
+    <!-- *** Builder View *** -->
+    <div id="builder-view" class="view">
+      <div class="builder-header">
+        <div class="builder-header-content">
+          <h2 id="builder-title" class="builder-title" data-testid="text-style-name"></h2>
+          <p id="builder-description" class="builder-description" data-testid="text-style-description"></p>
+        </div>
+        <button id="change-btn" class="btn-secondary" data-testid="button-change-style">CHANGE</button>
+      </div>
+      <div class="builder-content">
+        <div class="reference-image">
+          <img id="reference-cap" src="" alt="Cap Style" data-testid="img-reference-cap">
+        </div>
+        <div class="parts-container">
+          <div id="parts-list" class="parts-list"></div>
+          <div class="execute-button-container">
+            <button id="execute-btn" class="btn-primary" data-testid="button-execute">SUBMIT DESIGN</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- End of app-container -->
+
+  <script src="app.js"></script>
+</body>
+</html>
